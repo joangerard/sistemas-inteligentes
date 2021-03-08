@@ -22,6 +22,7 @@ class World:
         return filtered_successors
 
     def mark_island_as_visited_bfs(self, i, j):
+        # BFS uses a queue
         open = queue.SimpleQueue()
         close = []
 
@@ -43,7 +44,7 @@ class World:
                 open.put(successor)
 
     def mark_island_as_visited_dfs(self, i, j):
-        # stack
+        # DFS uses a stack
         open = []
         close = []
 
