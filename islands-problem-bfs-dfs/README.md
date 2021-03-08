@@ -6,11 +6,13 @@ El mapa es una matriz de n filas y m columnas. En la matriz pueden haber 1s o 0s
 
 Por ejemplo, el siguiente mapa contiene 4 islas.
 
+```
 111000
 111000
 000001
 000001
 100010
+```
 
 ## Solución
 
