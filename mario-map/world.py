@@ -23,6 +23,19 @@ class World:
 
         return filtered_successors
 
+    def discard_successors_marios_perspective(self, successors):
+        filtered_successors = []
+
+        for successor in successors:
+            i = successor[0]
+            j = successor[1]
+
+            if 0 <= i < self.rows and 0 <= j < self.columns and \
+                    (self.map[i][j] == self.settings.EMPTY or self.map[i][j] == self.settings.PIPE):
+                filtered_successors.append(successor)
+
+        return filtered_successors
+
     def discard_neighbors(self, neighbors):
         filtered_neighbors = []
 
@@ -54,6 +67,34 @@ class World:
             for successor in successors:
                 self.map[successor[0]][successor[1]] = self.map[state[0]][state[1]] + 1
                 open.put(successor)
+
+    def find_position_shortest_pipe_from(self, mario_position):
+        open = queue.SimpleQueue()
+
+        # start bfs from Mario:
+        open.put(mario_position)
+
+        while open.qsize() != 0:
+            state = open.get()
+
+            # Goal Test: return pipe's position
+            if self.map[state[0]][state[1]] == self.settings.PIPE:
+                return True, state
+
+            # Mark state as visited
+            self.map[state[0]][state[1]] = self.settings.VISITED
+
+            # Transition Function
+            actions = [self.settings.UP, self.settings.DOWN, self.settings.LEFT, self.settings.RIGHT]
+            successors = self.agent.transition_function(state, actions)
+            successors = self.discard_successors_marios_perspective(successors)
+
+            # Put the successors into the queue
+            for successor in successors:
+                open.put(successor)
+
+        # No solution
+        return False, None
 
     def get_next_step(self, current_position, map_numbers):
 
